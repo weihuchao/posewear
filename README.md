@@ -73,20 +73,20 @@
 
 ## 快速开始
 
-需要 Python 3.9+ 和 Pillow；测试与部署另外需要 Node.js 18+。
+需要 [uv](https://docs.astral.sh/uv/)（负责 Python 3.9+ 与 Pillow）；测试与部署另外需要 Node.js 18+。
 
 ```bash
 git clone https://github.com/atuizz/posewear.git && cd posewear
-pip install pillow
+uv sync                              # 建 .venv 并装依赖（Pillow）
 
 # 1. 从原作者的图库下载数据和图片到 ./assets-raw（数 GB，耗时较长）
-python3 scripts/fetch-assets.py            # 也可只下部分：pose costume portrait
+uv run scripts/fetch-assets.py       # 也可只下部分：pose costume portrait
 
 # 2. 构建到 dist/
-python3 build.py
+uv run build.py
 
 # 3. 本地预览 http://localhost:8787
-python3 -m http.server 8787 -d dist
+uv run python -m http.server 8787 -d dist
 ```
 
 | 环境变量 | 作用 | 默认 |
@@ -101,7 +101,7 @@ python3 -m http.server 8787 -d dist
 ```bash
 npm install
 npx wrangler login
-POSEWEAR_SITE=https://<你的项目名>.pages.dev python3 build.py
+POSEWEAR_SITE=https://<你的项目名>.pages.dev uv run build.py
 npx wrangler pages deploy dist --project-name <你的项目名>
 ```
 
@@ -115,7 +115,7 @@ npx wrangler pages deploy dist --project-name <你的项目名>
 
 ```bash
 npm install && npx playwright install chromium
-python3 -m http.server 8787 -d dist &
+uv run python -m http.server 8787 -d dist &
 node tests/v12.js      # 图库、收藏、灯箱、路由、移动端
 node tests/v13.js      # 试穿工作台全流程、深色模式、长文本
 U=https://posewear.pages.dev node tests/v12.js   # 直接测线上
@@ -181,7 +181,7 @@ Key 只存在你浏览器的 localStorage 里，可在设置里清除。默认�
 欢迎提 Issue 和 PR：
 
 1. Fork 后新建分支；
-2. 改动前端后运行 `python3 build.py` 和 `node tests/v12.js && node tests/v13.js`；
+2. 改动前端后运行 `uv run build.py` 和 `node tests/v12.js && node tests/v13.js`；
 3. PR 里说明改了什么，界面改动附截图。
 
 文案请保持口语、简洁；不提交任何素材图片或密钥。

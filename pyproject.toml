@@ -1,0 +1,12 @@
+[project]
+name = "posewear"
+version = "0.1.0"
+description = "衣姿 PoseWear：姿势、服装、人像参考图库与 AI 试穿工作台"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+dependencies = ["pillow>=10.1"]
+
+[tool.uv]
+# 只是仓库根目录下的构建脚本，不打包成可安装的库
+package = false

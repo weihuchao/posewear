@@ -61,14 +61,14 @@ Pose, outfit and portrait reference galleries with bilingual prompts, plus a bri
 
 ## Quick start
 
-You need Python 3.9+ with Pillow. Tests and deploys also need Node.js 18+.
+You need [uv](https://docs.astral.sh/uv/) (it provides Python 3.9+ and Pillow). Tests and deploys also need Node.js 18+.
 
 ```bash
 git clone https://github.com/atuizz/posewear.git && cd posewear
-pip install pillow
-python3 scripts/fetch-assets.py   # downloads data and images from the original galleries (several GB)
-python3 build.py                  # outputs dist/
-python3 -m http.server 8787 -d dist
+uv sync                              # creates .venv and installs Pillow
+uv run scripts/fetch-assets.py       # downloads data and images from the original galleries (several GB)
+uv run build.py                      # outputs dist/
+uv run python -m http.server 8787 -d dist
 ```
 
 Set `POSEWEAR_RAW` to use a different asset folder, and `POSEWEAR_SITE` to set your own site URL for the sitemap and share links.
@@ -79,7 +79,7 @@ The repository ships without assets, so build locally first, then upload `dist/`
 
 ```bash
 npm install && npx wrangler login
-POSEWEAR_SITE=https://<project>.pages.dev python3 build.py
+POSEWEAR_SITE=https://<project>.pages.dev uv run build.py
 npx wrangler pages deploy dist --project-name <project>
 ```
 
@@ -91,7 +91,7 @@ The Playwright tests mock every provider endpoint, so no real key is needed. The
 
 ```bash
 npm install && npx playwright install chromium
-python3 -m http.server 8787 -d dist &
+uv run python -m http.server 8787 -d dist &
 node tests/v12.js && node tests/v13.js
 ```
 
@@ -105,7 +105,7 @@ node tests/v12.js && node tests/v13.js
 
 ## Contributing
 
-Issues and PRs are welcome. Run `python3 build.py` and both test files before you open a PR, and add screenshots for UI changes. Please don't commit any assets or keys.
+Issues and PRs are welcome. Run `uv run build.py` and both test files before you open a PR, and add screenshots for UI changes. Please don't commit any assets or keys.
 
 ## Acknowledgements
 

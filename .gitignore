@@ -4,6 +4,7 @@ assets-raw/
 raw/
 # 依赖与本地状态
 node_modules/
+.venv/
 .wrangler/
 .dev.vars
 .env*

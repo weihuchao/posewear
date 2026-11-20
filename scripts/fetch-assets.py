@@ -5,9 +5,9 @@
 请只用于本地构建与学习，遵守原站的使用条款；下载时请保持低并发，不要反复全量抓取。
 
 用法：
-  python3 scripts/fetch-assets.py              # 全部
-  python3 scripts/fetch-assets.py pose costume # 只下载部分素材库
-  python3 scripts/fetch-assets.py --meta-only  # 只下载数据，不下载图片
+  uv run scripts/fetch-assets.py              # 全部
+  uv run scripts/fetch-assets.py pose costume # 只下载部分素材库
+  uv run scripts/fetch-assets.py --meta-only  # 只下载数据，不下载图片
 """
 import json, os, re, sys, time, urllib.request, concurrent.futures as cf
 
@@ -89,7 +89,7 @@ def main():
                 n += s or 0
                 if i % 200 == 0:
                     print(f'  {i}/{len(jobs)}  {n / 1e6:.0f} MB', flush=True)
-    print('完成。接下来运行：python3 build.py')
+    print('完成。接下来运行：uv run build.py')
 
 
 if __name__ == '__main__':

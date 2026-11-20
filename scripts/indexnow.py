@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """部署后向 IndexNow 提交 URL。
-用法：python3 scripts/indexnow.py            # 提交与上次相比新增/变化的页面（首次为全部）
-      python3 scripts/indexnow.py --all      # 提交全部
+用法：uv run scripts/indexnow.py            # 提交与上次相比新增/变化的页面（首次为全部）
+      uv run scripts/indexnow.py --all      # 提交全部
 依赖 build.py 生成的 urls.txt 与 dist/，状态存在 .indexnow-state.json。"""
 import json,sys,os,hashlib,urllib.request
 SITE=os.environ.get('POSEWEAR_SITE','https://posewear.pages.dev').rstrip('/');HOST=SITE.split('://',1)[1]
