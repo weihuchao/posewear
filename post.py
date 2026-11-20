@@ -16,6 +16,9 @@ idx=open('src/index.html').read()
 for f in ['style.css','app.js','zip.js','extras.js','studio.js']:
   idx=idx.replace(f'"{f}"',f'"/{A[f]}"')
 idx=idx.replace('href="poses.json"',f'href="/{A["poses.json"]}"')
+# 预置的模型配置（.env，见 .env.example）：写进页面，浏览器打开即生效
+_cfg=globals().get('WB') or {}
+if _cfg: idx=idx.replace('</head>','<script>window.WB_CFG='+json.dumps(_cfg,ensure_ascii=False).replace('</','<\\/')+';</script></head>')
 open(f'{D}/index.html','w').write(idx)
 for f in ['style.css','app.js','zip.js','extras.js','studio.js']:
   if os.path.exists(f'{D}/{f}'): os.remove(f'{D}/{f}')

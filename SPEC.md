@@ -49,5 +49,23 @@ uv run python -m http.server 8787 -d dist
 - 仓库没有打 git tag，也没有 CHANGELOG 文件
 
 ### 因此
-
 不改前端页面显示、不加版本号字段、不打 release tag。v0.1、v0.2 只作内部记录用途。
+
+## v0.3 预置模型配置
+
+### 背景
+
+服务商配置原本只存在使用者浏览器的 localStorage 里：Base URL 和模型名每次换模型都要在「API 设置」面板重填。自建部署时，地址与模型名散落在每个人的浏览器里，不好统一管理。
+
+### 做法
+
+- 新增 `.env.example` 模板，`.env` 不入库（`.gitignore` 放行 `.env.example`，其余 `.env*` 仍忽略）
+- `build.py` 读项目根的 `.env`，解析出预置项。真实的 shell 环境变量优先于 `.env` 里的同名项
+- `post.py` 把预置项以内联脚本 `window.WB_CFG` 注入 `index.html`，注入点在内联脚本哈希计算之前，CSP 的 `script-src` 白名单因此覆盖它
+- `src/studio.js` 读取 `window.WB_CFG`：服务商、Base URL、模型名、协议、字段名优先于浏览器里保存的值；API Key 不在其中，仍只存在使用者浏览器
+- 设置面板显示一行提示，说明这些值由部署方预设、改动会被覆盖
+- `tests/v13.js` 在页面脚本执行前屏蔽 `window.WB_CFG`，测试结果不受开发者本地 `.env` 影响
+
+### 结论
+
+`.env` 只放非敏感项：站点地址、服务商、Base URL、模型名、接口协议、参考图字段名。API Key 不进 `.env`，写进构建产物等于公开，密钥仍由使用者在自己的浏览器里填。

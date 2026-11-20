@@ -13,7 +13,7 @@ async function setup(prov,vp,dark){const c=await b.newContext({viewport:vp||{wid
   const body=/generateContent/.test(u+(req.headers()['x-target-url']||''))?{candidates:[{content:{parts:[{text:'ok'},{inlineData:{mimeType:'image/png',data:img}}]}}]}:{data:[{b64_json:img}]};
   return route.fulfill({status:200,headers:H,body:JSON.stringify(body)})};
  await p.route(/api\.openai\.com|generativelanguage\.googleapis\.com|ark\.cn-beijing\.volces\.com|\/api\/proxy/,handler);
- await p.addInitScript(([prov,dark])=>{if(!sessionStorage.x){sessionStorage.x=1;localStorage.setItem('wbCfg',JSON.stringify({prov,key:'sk-test-123',base:prov=='custom'?'https://relay.example.com':'',model:'',field:'image[]',proto:'json',proxy:false}));localStorage.setItem('introX','1');if(dark)localStorage.setItem('theme','dark')}window.__TMO=3000},[prov,dark]);
+ await p.addInitScript(([prov,dark])=>{Object.defineProperty(window,'WB_CFG',{value:undefined,writable:false,configurable:true});if(!sessionStorage.x){sessionStorage.x=1;localStorage.setItem('wbCfg',JSON.stringify({prov,key:'sk-test-123',base:prov=='custom'?'https://relay.example.com':'',model:'',field:'image[]',proto:'json',proxy:false}));localStorage.setItem('introX','1');if(dark)localStorage.setItem('theme','dark')}window.__TMO=3000},[prov,dark]);
  await p.goto(U+'/#studio');await p.waitForFunction(()=>window.WB&&window.APP,null,{timeout:15000});
  await p.setInputFiles('#wbFile',FX+'person.png');
  await p.evaluate(async()=>{await APP.load('costume');const k=Object.keys(APP.ITEMS).find(k=>APP.ITEMS[k].type=='costume');await WB.pick(APP.ITEMS[k])});

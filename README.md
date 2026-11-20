@@ -93,6 +93,26 @@ uv run python -m http.server 8787 -d dist
 |---|---|---|
 | `POSEWEAR_RAW` | 原始素材目录 | `assets-raw` |
 | `POSEWEAR_SITE` | 站点地址，用于 sitemap 和分享链接 | `https://posewear.pages.dev` |
+| `POSEWEAR_PROV` | 预置的服务商：`openai` / `gemini` / `seedream` / `custom` | 不预置 |
+| `POSEWEAR_BASE_URL` | 预置的 Base URL | 不预置 |
+| `POSEWEAR_MODEL` | 预置的模型名 | 用服务商自己的默认模型 |
+| `POSEWEAR_PROTO` | 预置的接口协议：`edits` 或 `json` | `edits` |
+| `POSEWEAR_FIELD` | 预置的参考图字段名：`image[]` 或 `image` | `image[]` |
+
+环境变量可以写进项目根的 `.env`（模板见 `.env.example`，`.env` 不入库）。
+
+### 预置模型配置
+
+想让自己部署的站点固定用某个中转或模型，把 `.env.example` 复制成 `.env` 改好，再重新构建：
+
+```bash
+cp .env.example .env    # 然后编辑 .env
+uv run build.py
+```
+
+这些值会写进构建产物，访问站点时直接生效，不用再在页面里手填；优先级高于浏览器里保存的值，所以换模型只要改 `.env` 重新构建。
+
+API Key 不放在 `.env` 里：密钥只存在使用者自己的浏览器，写进构建产物就等于公开。页面的「API 设置」里仍需填一次密钥。
 
 ## 部署
 

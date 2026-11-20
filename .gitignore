@@ -8,6 +8,7 @@ node_modules/
 .wrangler/
 .dev.vars
 .env*
+!.env.example
 __pycache__/
 *.pyc
 # 测试输出

@@ -73,6 +73,27 @@ uv run python -m http.server 8787 -d dist
 
 Set `POSEWEAR_RAW` to use a different asset folder, and `POSEWEAR_SITE` to set your own site URL for the sitemap and share links.
 
+### Preset model configuration
+
+To pin your own deployment to a given relay or model, copy `.env.example` to `.env`, edit it, and rebuild:
+
+```bash
+cp .env.example .env    # then edit .env
+uv run build.py
+```
+
+The values are baked into the build output and apply as soon as the site loads, so nobody has to fill them in again. They take precedence over anything saved in a browser, so switching models is just an `.env` edit plus a rebuild.
+
+| Variable | Meaning | Default |
+|---|---|---|
+| `POSEWEAR_PROV` | Preset provider: `openai` / `gemini` / `seedream` / `custom` | none |
+| `POSEWEAR_BASE_URL` | Preset Base URL | none |
+| `POSEWEAR_MODEL` | Preset model name | the provider's own default |
+| `POSEWEAR_PROTO` | Preset protocol: `edits` or `json` | `edits` |
+| `POSEWEAR_FIELD` | Preset reference image field: `image[]` or `image` | `image[]` |
+
+API keys are not part of `.env`: a key lives only in the visitor's own browser, and putting one in the build output would publish it. People still enter their key once in the "API settings" dialog.
+
 ## Deploy
 
 The repository ships without assets, so build locally first, then upload `dist/` to Cloudflare Pages:
