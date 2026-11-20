@@ -2,7 +2,7 @@
 // 限制：① 只接受本站页面发起的请求（Origin / Referer 同源）；② 只转发到官方接口域名，
 // 自定义中转必须带 x-proxy-custom: 1 且路径符合图片接口格式；③ 结果图片只从官方结果 CDN 下载；④ 每 IP 频率限制。
 const API_PATH=/^\/(api\/v3|v\d+(beta|alpha)?)\/(images\/(edits|generations)|models(\/[^/]+(:generateContent)?)?)$/;
-const OFFICIAL=[/^api\.openai\.com$/,/^generativelanguage\.googleapis\.com$/,/^ark\.[a-z0-9-]+\.volces\.com$/,/^ark\.[a-z0-9-]+\.bytepluses\.com$/];
+const OFFICIAL=[/^api\.openai\.com$/,/^generativelanguage\.googleapis\.com$/,/^ark\.[a-z0-9-]+\.volces\.com$/,/^ark\.[a-z0-9-]+\.bytepluses\.com$/,/^api\.minimax(i)?\.(cn|com)$/];
 const IMG_HOSTS=[/^oaidalleapiprodscus\.blob\.core\.windows\.net$/,/(^|\.)volces\.com$/,/(^|\.)bytepluses\.com$/,/(^|\.)googleusercontent\.com$/];
 const DROP=['host','x-target-url','x-proxy-kind','x-proxy-custom','cookie','origin','referer','x-forwarded-for','x-forwarded-proto','x-real-ip','content-length','sec-fetch-site','sec-fetch-mode','sec-fetch-dest'];
 // 每个 isolate 的内存限流（尽力而为）；正式防护建议在 Cloudflare 控制台为 /api/proxy 加速率限制规则。

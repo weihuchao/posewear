@@ -34,7 +34,7 @@
 | **素材库** | 姿势（多角度线稿）、深度姿势（热链原站深度图）、服装（按季节和类型分类）、动画服装（动画风穿搭）、人像（脸模参考，CC0）。每张图都有中文描述；深度姿势另附日文原名 |
 | **搜索与筛选** | 中英文关键词、分类、排序、随机一张；每个素材有独立详情页，方便分享 |
 | **试穿工作台** | 上传人物照，选服装和姿势，生成试穿图，或不用照片直接出图；一次可出多张，有前后对比、单张下载和打包下载 |
-| **多家服务商** | OpenAI、Gemini、豆包 Seedream、OpenAI 兼容的自定义中转，见下表 |
+| **多家服务商** | OpenAI、Gemini、豆包 Seedream、MiniMax、OpenAI 兼容的自定义中转，见下表 |
 | **生成记录** | 保存在本机 IndexedDB，可查看、删除、清空，并可撤销 |
 | **清楚的报错** | 密钥无效、限流、超时、被安全审核拦截等情况会分别说明，并给出下一步可以怎么做 |
 | **减少误拦截** | 默认开启。发送前把提示词改写成中性的电商试穿描述，不改变服装和姿势；关闭后按原样发送 |
@@ -50,6 +50,7 @@
 | OpenAI | API Key（gpt-image 需已验证组织） | gpt-image-1 | 走 images/edits，多张参考图；安全审核最严 |
 | Gemini | Google AI Studio 的 API Key | gemini-2.5-flash-image | 即 Nano Banana |
 | 豆包 Seedream | 火山方舟 API Key | doubao-seedream-4-0-250828 | 国内直连，默认经本站代理以解决跨域 |
+| MiniMax | 开放平台 API Key | MiniMax-H3-Image | 走 images/edits，支持 1~16 张参考图；浏览器直连，不需要代理 |
 | 自定义中转 | Base URL + Key + 模型名 | 自填 | OpenAI 兼容；可选 edits（multipart）或 generations（JSON） |
 
 ## 更新日志

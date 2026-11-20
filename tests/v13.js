@@ -12,7 +12,7 @@ async function setup(prov,vp,dark){const c=await b.newContext({viewport:vp||{wid
   if(mode=='slow')await new Promise(r=>setTimeout(r,1500));
   const body=/generateContent/.test(u+(req.headers()['x-target-url']||''))?{candidates:[{content:{parts:[{text:'ok'},{inlineData:{mimeType:'image/png',data:img}}]}}]}:{data:[{b64_json:img}]};
   return route.fulfill({status:200,headers:H,body:JSON.stringify(body)})};
- await p.route(/api\.openai\.com|generativelanguage\.googleapis\.com|ark\.cn-beijing\.volces\.com|\/api\/proxy/,handler);
+ await p.route(/api\.openai\.com|generativelanguage\.googleapis\.com|ark\.cn-beijing\.volces\.com|api\.minimax\.cn|\/api\/proxy/,handler);
  await p.addInitScript(([prov,dark])=>{Object.defineProperty(window,'WB_CFG',{value:undefined,writable:false,configurable:true});if(!sessionStorage.x){sessionStorage.x=1;localStorage.setItem('wbCfg',JSON.stringify({prov,key:'sk-test-123',base:prov=='custom'?'https://relay.example.com':'',model:'',field:'image[]',proto:'json',proxy:false}));localStorage.setItem('introX','1');if(dark)localStorage.setItem('theme','dark')}window.__TMO=3000},[prov,dark]);
  await p.goto(U+'/#studio');await p.waitForFunction(()=>window.WB&&window.APP,null,{timeout:15000});
  await p.setInputFiles('#wbFile',FX+'person.png');
@@ -20,7 +20,7 @@ async function setup(prov,vp,dark){const c=await b.newContext({viewport:vp||{wid
  await p.waitForFunction(()=>!document.querySelector('#wbGo').disabled,null,{timeout:15000});return {c,p}}
 const go=async(p)=>{await p.click('#wbGo');await p.waitForFunction(()=>!document.querySelector('#wbBusy')||document.querySelector('#wbBusy').hidden,null,{timeout:20000}).catch(()=>{});await p.waitForTimeout(300)};
 const st=p=>p.evaluate(()=>({res:WB&&document.querySelector('#wbAfter').src.slice(0,5),err:document.querySelector('#wbErr').hidden?'':document.querySelector('#wbErr').innerText.replace(/\s+/g,' '),hist:document.querySelectorAll('#wbHist [data-t]').length,toast:(document.querySelector('#toast')||{}).innerText||''}));
-for(const prov of ['openai','gemini','seedream','custom']){hits=[];mode='ok';const {c,p}=await setup(prov);await go(p);let s=await st(p);R.push([prov+' success',s.res=='blob:'&&!s.err&&s.hist>=1,JSON.stringify(s)+' '+hits[0]]);
+for(const prov of ['openai','gemini','seedream','minimax','custom']){hits=[];mode='ok';const {c,p}=await setup(prov);await go(p);let s=await st(p);R.push([prov+' success',s.res=='blob:'&&!s.err&&s.hist>=1,JSON.stringify(s)+' '+hits[0]]);
  if(prov=='gemini'||prov=='seedream'){for(const m of prov=='gemini'?['safe-gem','safe-gem2']:['safe-sd']){hits=[];mode=m;await go(p);const t=await p.$eval('#wbErr',e=>e.innerText);R.push([m,/安全审核/.test(t)&&hits.length==1&&!/检查 API 设置/.test(t),t.slice(0,80)+' hits '+hits.length])}mode='ok'}
  if(prov=='custom')R.push(['custom via proxy',hits.every(h=>/\/api\/proxy/.test(h)&&/relay\.example/.test(h)),hits[0]]);
  if(prov=='openai'){await p.screenshot({path:S+'d-result.png'});

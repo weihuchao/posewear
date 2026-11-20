@@ -69,3 +69,22 @@ uv run python -m http.server 8787 -d dist
 ### 结论
 
 `.env` 只放非敏感项：站点地址、服务商、Base URL、模型名、接口协议、参考图字段名。API Key 不进 `.env`，写进构建产物等于公开，密钥仍由使用者在自己的浏览器里填。
+
+## v0.4 接入 MiniMax H3-Image
+
+### 背景
+
+本地部署要改用 MiniMax 官方模型出图。原先只有「自定义中转」一个口子，而自定义中转被强制走本站 `/api/proxy`：本地用 `python -m http.server` 起静态站时没有 Pages Functions，请求打到静态服务器上只会得到 404。另外把文档页地址当成 Base URL 时，服务商同样返回 404。
+
+### 做法
+
+- `src/studio.js` 新增 MiniMax 服务商：默认地址 `https://api.minimax.cn/v1`，默认模型 `MiniMax-H3-Image`
+- 请求分支：有参考图走 `POST /v1/images/edits`（multipart，参考图字段 `image[]`，与官方 schema 一致），没有参考图走 `POST /v1/images/generations`（JSON）
+- 固定带 `response_format=b64_json` 与 `output_format=png`：结果内嵌在响应里，省掉一次图片下载，也避开结果图 CDN 的跨域问题
+- `api.minimax.cn` 加入直连名单，浏览器直接调用官方接口，不需要本站代理；`functions/api/proxy.js` 的官方域名白名单同步加入，勾选代理转发时也走得通
+- 设置面板增加 MiniMax 选项与申请密钥的入口
+- `tests/v13.js` 增加 minimax 用例
+
+### 结论
+
+MiniMax 官方接口允许浏览器跨域：预检响应回显 Origin 并允许 Authorization 头，所以本地预览不需要任何服务端组件。密钥仍由使用者在自己的浏览器里填写。

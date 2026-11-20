@@ -38,6 +38,7 @@ Pose, outfit and portrait reference galleries with bilingual prompts, plus a bri
 | OpenAI | API key (gpt-image requires a verified org) | gpt-image-1 | images/edits with multiple references; strictest moderation |
 | Gemini | Google AI Studio key | gemini-2.5-flash-image | a.k.a. Nano Banana |
 | Doubao Seedream | Volcengine Ark key | doubao-seedream-4-0-250828 | routed through the site proxy by default for CORS |
+| MiniMax | MiniMax platform key | MiniMax-H3-Image | images/edits with 1-16 reference images; called straight from the browser, no proxy needed |
 | Custom relay | Base URL, key and model | any | OpenAI-compatible; choose edits (multipart) or generations (JSON) |
 
 ## Changelog
@@ -86,7 +87,7 @@ The values are baked into the build output and apply as soon as the site loads, 
 
 | Variable | Meaning | Default |
 |---|---|---|
-| `POSEWEAR_PROV` | Preset provider: `openai` / `gemini` / `seedream` / `custom` | none |
+| `POSEWEAR_PROV` | Preset provider: `openai` / `gemini` / `seedream` / `minimax` / `custom` | none |
 | `POSEWEAR_BASE_URL` | Preset Base URL | none |
 | `POSEWEAR_MODEL` | Preset model name | the provider's own default |
 | `POSEWEAR_PROTO` | Preset protocol: `edits` or `json` | `edits` |
