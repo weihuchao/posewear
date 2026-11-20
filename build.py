@@ -1,6 +1,7 @@
 import json,os,shutil,subprocess,depthpack
 from costume_text import gen2
 import hashlib,re,html as H
+import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
 from PIL import Image
 # 素材目录：默认 ./assets-raw，可用环境变量 POSEWEAR_RAW 指定（见 scripts/fetch-assets.py）
@@ -101,7 +102,10 @@ for x in ['p/t','c/m','o/p','o/c','a/m','o/a','r/t','r/m','o/r']: os.makedirs(f'
 if os.path.exists(f'{D}/p/t'):
   for f in os.listdir(f'{D}/p/t'):
     if f.endswith('.jpg'): os.remove(f'{D}/p/t/{f}')
-with ProcessPoolExecutor() as ex: list(ex.map(cv,pd)); list(ex.map(cm,cd)); list(ex.map(ca,ad)); list(ex.map(cr,rd))
+# macOS 与新版本 Linux 的多进程默认启动方式是 spawn / forkserver，子进程会重新导入本脚本，
+# 重复执行拷贝、写文件等副作用。固定用 fork，子进程直接继承父进程状态。
+CTX=mp.get_context('fork') if 'fork' in mp.get_all_start_methods() else mp.get_context()
+with ProcessPoolExecutor(mp_context=CTX) as ex: list(ex.map(cv,pd)); list(ex.map(cm,cd)); list(ex.map(ca,ad)); list(ex.map(cr,rd))
 # 深度姿势：只解析素材包里的文本，热链包不复制图片（见 depthpack.py）
 _dc=depthpack.catalog(); DJ=J(_dc['payload']); DEPTH_ORIGINS=_dc['origins']
 for src,rel in _dc['copies']:

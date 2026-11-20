@@ -2,7 +2,7 @@
 import datetime,time
 TODAY=datetime.date.today().isoformat()
 MT=lambda p:datetime.date.fromtimestamp(os.path.getmtime(p)).isoformat()
-LM={'pose':MT(f'{R}/pose/data.json'),'costume':MT(f'{R}/costume/data.json'),'anime':MT(f'{R}/anime/data.json'),'portrait':MT(f'{R}/portrait/data.json')}
+LM={'pose':MT(f'{R}/pose/data.json'),'costume':MT(f'{R}/costume/data.json'),'anime':MT(f'{R}/anime/data.json'),'portrait':MT(f'{R}/portrait/images.js')}
 for d in ['en','tag']:
   if os.path.exists(f'{D}/{d}'): shutil.rmtree(f'{D}/{d}')
 if not os.path.exists('indexnow.key'):
@@ -214,10 +214,10 @@ HC=dict(pose=len(SP),ang=NA_PUB,cos=len(SC),ani=len(SA),por=len(SR));HA=dict(pos
 zh_desc=f"衣姿 PoseWear：{HC['pose']} 组姿势（{HC['ang']:,} 张角度图）、{HC['cos']:,} 套服装、{HC['ani']:,} 套动画服装、{HC['por']:,} 张人像参考图，附中英文提示词，可上传照片在线 AI 试穿。免费，无需注册。"
 zhttl='衣姿 PoseWear · 姿势、服装、人像参考图库 | 中英文提示词 + 在线 AI 试穿'
 idx=open(f'{D}/index.html').read()
-idx=re.sub(r'<title>.*?</title>',f'<title>{zhttl}</title>',idx,1)
-idx=re.sub(r'<meta name="description" content="[^"]*">',f'<meta name="description" content="{E(zh_desc)}">',idx,1)
-idx=re.sub(r'<meta property="og:title" content="[^"]*">','<meta property="og:title" content="衣姿 PoseWear：姿势、服装、人像参考图库">',idx,1)
-idx=re.sub(r'<meta property="og:description" content="[^"]*">',f'<meta property="og:description" content="{E(zh_desc)}">',idx,1)
+idx=re.sub(r'<title>.*?</title>',f'<title>{zhttl}</title>',idx,count=1)
+idx=re.sub(r'<meta name="description" content="[^"]*">',f'<meta name="description" content="{E(zh_desc)}">',idx,count=1)
+idx=re.sub(r'<meta property="og:title" content="[^"]*">','<meta property="og:title" content="衣姿 PoseWear：姿势、服装、人像参考图库">',idx,count=1)
+idx=re.sub(r'<meta property="og:description" content="[^"]*">',f'<meta property="og:description" content="{E(zh_desc)}">',idx,count=1)
 idx=idx.replace('<meta name="twitter:card" content="summary_large_image">',f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="{E(zh_desc)}">',1)
 idx=idx.replace('<link rel="canonical" href="https://posewear.pages.dev/">','<link rel="canonical" href="https://posewear.pages.dev/">'+alts('/'))
 LD=[{"@type":"WebSite","@id":SITE+'/#website',"url":SITE+'/',"name":"衣姿 PoseWear","alternateName":["PoseWear","衣姿"],"inLanguage":"zh-CN","description":zh_desc,

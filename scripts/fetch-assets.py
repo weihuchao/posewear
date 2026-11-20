@@ -22,23 +22,34 @@ UA = {'User-Agent': 'Mozilla/5.0 (PoseWear local build)'}
 WORKERS = 4
 
 
-def get(url, path=None, tries=4):
-    if path and os.path.exists(path) and os.path.getsize(path) > 0:
-        return 0
+def get(url, tries=4):
+    """取回内容字节，连续失败则退出。"""
     for i in range(tries):
         try:
-            b = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60).read()
-            if path is None:
-                return b
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            open(path + '.part', 'wb').write(b)
-            os.replace(path + '.part', path)
-            return len(b)
+            return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60).read()
         except Exception as e:
             err = e
             time.sleep(2 + i * 3)
     print('失败', url, err, flush=True)
-    return None if path is None else 0
+    sys.exit(f'取不到 {url}，稍后重试')
+
+
+def fetch(url, path, tries=4):
+    """下载到 path，已存在则跳过。返回 (状态, 字节数)，状态为 ok / skip / fail。"""
+    if os.path.exists(path) and os.path.getsize(path) > 0:
+        return 'skip', 0
+    for i in range(tries):
+        try:
+            b = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60).read()
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            open(path + '.part', 'wb').write(b)
+            os.replace(path + '.part', path)
+            return 'ok', len(b)
+        except Exception as e:
+            err = e
+            time.sleep(2 + i * 3)
+    print('失败', url, err, flush=True)
+    return 'fail', 0
 
 
 def inline_data(html):
@@ -83,12 +94,17 @@ def main():
         if only_meta:
             continue
         jobs = [(SRC[lib] + f, os.path.join(OUT, lib, f)) for f in files]
-        n = 0
+        n = 0; ok = 0; skip = 0; fail = 0
         with cf.ThreadPoolExecutor(WORKERS) as ex:
-            for i, s in enumerate(ex.map(lambda j: get(*j), jobs)):
-                n += s or 0
+            for i, (st, sz) in enumerate(ex.map(lambda j: fetch(*j), jobs)):
+                if st == 'ok': ok += 1; n += sz
+                elif st == 'skip': skip += 1
+                else: fail += 1
                 if i % 200 == 0:
-                    print(f'  {i}/{len(jobs)}  {n / 1e6:.0f} MB', flush=True)
+                    print(f'  {i}/{len(jobs)}  本次下载 {n / 1e6:.0f} MB  已存在 {skip}  失败 {fail}', flush=True)
+        print(f'{lib}: 新下载 {ok} 个（{n / 1e6:.0f} MB）| 已存在 {skip} 个 | 失败 {fail} 个', flush=True)
+        if fail:
+            print(f'{lib}: 有 {fail} 个没下下来，再跑一次本命令只会补这些', flush=True)
     print('完成。接下来运行：uv run build.py')
 
 
