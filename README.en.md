@@ -61,7 +61,7 @@ Pose, outfit and portrait reference galleries with bilingual prompts, plus a bri
 
 ## Quick start
 
-You need [uv](https://docs.astral.sh/uv/) (it provides Python 3.9+ and Pillow). Tests and deploys also need Node.js 18+.
+You need [uv](https://docs.astral.sh/uv/): it manages the Python 3.9+ environment and the Pillow dependency, so there is nothing to install by hand. Tests and deploys also need Node.js 18+.
 
 ```bash
 git clone https://github.com/atuizz/posewear.git && cd posewear

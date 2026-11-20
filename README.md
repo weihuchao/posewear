@@ -73,7 +73,7 @@
 
 ## 快速开始
 
-需要 [uv](https://docs.astral.sh/uv/)（负责 Python 3.9+ 与 Pillow）；测试与部署另外需要 Node.js 18+。
+需要 [uv](https://docs.astral.sh/uv/)：Python 3.9+ 环境和 Pillow 依赖都由它管理，不用自己装；测试与部署另外需要 Node.js 18+。
 
 ```bash
 git clone https://github.com/atuizz/posewear.git && cd posewear
@@ -136,6 +136,8 @@ costume_text.py         服装中英文描述
 words.txt, tr_*.txt     词表与中英文翻译
 depth/                  深度姿势素材包（只有文本，图片热链原站）
 depthpack.py            把素材包编成可替换的 depths.json
+pyproject.toml          依赖声明（uv）
+uv.lock                 依赖锁文件（uv）
 scripts/                fetch-assets.py 下载素材，make-icons.js 生成图标
 tests/                  Playwright 测试
 docs/                   README 用图
